@@ -6,20 +6,20 @@ interface Props {
 
 export function RInput({ onSearch }: Props) {
   const [inputValue, setInputValue] = useState('')
-  const [debouncedValue, setDebouncedValue] = useState('')
+  const [debouncedValue, setDebouncedValue] = useState(inputValue)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const handler = setTimeout(() => {
       setDebouncedValue(inputValue)
-    }, 500)
+    }, 300)
 
     return () => {
-      clearTimeout(timer)
+      clearTimeout(handler)
     }
   }, [inputValue])
 
   useEffect(() => {
-    if (debouncedValue) {
+    if (onSearch) {
       onSearch(debouncedValue)
     }
   }, [debouncedValue, onSearch])
