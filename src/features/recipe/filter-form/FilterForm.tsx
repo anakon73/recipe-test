@@ -1,5 +1,5 @@
+import { useCategories } from '@/shared/api/category'
 import { RCheckbox } from '@/shared/ui/RCheckbox'
-import { categories } from './config'
 
 interface Props {
   selectedCategories: string[]
@@ -7,6 +7,8 @@ interface Props {
 }
 
 export function FilterForm({ selectedCategories, onChange }: Props) {
+  const { data: categories } = useCategories()
+
   const handleCategoryChange = (category: string, checked: boolean) => {
     const updatedCategories = checked
       ? [...selectedCategories, category]
@@ -15,14 +17,22 @@ export function FilterForm({ selectedCategories, onChange }: Props) {
     onChange(updatedCategories)
   }
 
+  if (!categories) {
+    return (
+      <h1>Categories not found</h1>
+    )
+  }
+
   return (
     <div className="space-y-2">
-      {categories.map(category => (
+      {categories.categories.map(category => (
         <RCheckbox
-          key={category}
-          label={category}
-          checked={selectedCategories.includes(category)}
-          onChange={checked => handleCategoryChange(category, checked)}
+          key={category.idCategory}
+          label={category.strCategory}
+          checked={selectedCategories.includes(category.strCategory)}
+          onChange={
+            checked => handleCategoryChange(category.strCategory, checked)
+          }
         />
       ))}
     </div>
