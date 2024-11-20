@@ -5,21 +5,34 @@ interface Props {
 }
 
 export function RInput({ onSearch }: Props) {
-  const [value, setValue] = useState('')
+  const [inputValue, setInputValue] = useState('')
+  const [debouncedValue, setDebouncedValue] = useState('')
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      onSearch(value)
-    }, 300)
+    const timer = setTimeout(() => {
+      setDebouncedValue(inputValue)
+    }, 500)
 
-    return () => clearTimeout(timeout)
-  }, [value, onSearch])
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [inputValue])
+
+  useEffect(() => {
+    if (debouncedValue) {
+      onSearch(debouncedValue)
+    }
+  }, [debouncedValue, onSearch])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value)
+  }
 
   return (
     <input
       type="text"
-      value={value}
-      onChange={e => setValue(e.target.value)}
+      value={inputValue}
+      onChange={handleInputChange}
       placeholder="Search recipes..."
       className="border p-2 rounded w-full"
     />

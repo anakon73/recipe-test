@@ -38,16 +38,18 @@ export function RecipesPage() {
   }, [filteredRecipes, page])
 
   const totalPages = useMemo(() => {
-    if (recipes) {
-      return Math.ceil(recipes.meals.length / 6)
+    if (filteredRecipes) {
+      return Math.ceil(filteredRecipes.length / 6)
     }
 
     return 0
-  }, [recipes])
+  }, [filteredRecipes])
 
   const handleSearch = (searchQuery: string) => {
-    setQuery(searchQuery)
-    setPage(1)
+    if (query !== searchQuery) {
+      setQuery(searchQuery)
+      setPage(1)
+    }
   }
 
   return (
