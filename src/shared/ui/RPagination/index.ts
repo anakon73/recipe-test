@@ -1,0 +1,1 @@
+export { RPagination } from './RPagination'
